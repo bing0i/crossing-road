@@ -7,13 +7,14 @@
 
 using namespace std;
 
-class Brush {
+class Brush
+{
 public:
-	void gotoXY(int, int);
-	void drawPixel(int, int, char);
-	void drawShape(int, int, Shape);
-	void drawLine(int, int);
-	void clearShape(int x, int y, Shape s);
-	void clearScreen();
+  void gotoXY(int, int);
+  void drawPixel(int, int, char);
+  void drawShape(int, int, Shape);
+  void drawLine(int, int);
+  void clearShape(int x, int y, Shape s);
+  void clearScreen();
 };
 #endif

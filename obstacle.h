@@ -4,54 +4,71 @@
 #include "shape.h"
 #include "brush.h"
 
-class Obstacle {
+class Obstacle
+{
 private:
-	int x;
-	int y;
-	bool isMoving = false;
-	Shape shape;
+  int x;
+  int y;
+  bool isMoving = false;
+  Shape shape;
+
 public:
-	Obstacle(int coordX, int coordY, vector<vector<int>> s) : shape(s), x(coordX), y(coordY) {};
-	void move(int);
-	void stop();
-	Shape getShape();
-	int getX();
-	int getY();
+  Obstacle(int coordX, int coordY, vector<vector<int>> s) : shape(s), x(coordX), y(coordY){};
+  Obstacle(vector<vector<int>> s) : shape(s){};
+  void move(int);
+  void stop();
+  Shape getShape();
+  int getX();
+  int getY();
 };
 
-class Vehicle : public Obstacle {
+class Vehicle : public Obstacle
+{
 public:
-	Vehicle(int x, int y, vector<vector<int>> s) : Obstacle(x, y, s) {};
+  Vehicle(int x, int y, vector<vector<int>> s) : Obstacle(x, y, s){};
+  Vehicle(vector<vector<int>> s) : Obstacle(s){};
 };
 
-class Car : public Vehicle {
+class Car : public Vehicle
+{
 public:
-	Car(int, int);
+  Car();
+  Car(int, int);
 };
 
-class Truck : public Vehicle {
+class Truck : public Vehicle
+{
 public:
-	Truck(int, int);
+  Truck();
+  Truck(int, int);
 };
 
-class Animal : public Obstacle {
+class Animal : public Obstacle
+{
 public:
-	Animal(int x, int y, vector<vector<int>> s) : Obstacle(x, y, s) {};
+  Animal(vector<vector<int>> s) : Obstacle(s){};
+  Animal(int x, int y, vector<vector<int>> s) : Obstacle(x, y, s){};
 };
 
-class Dinausor : public Animal {
+class Dinausor : public Animal
+{
 public:
-	Dinausor(int, int);
+  Dinausor();
+  Dinausor(int, int);
 };
 
-class Bird : public Animal {
+class Bird : public Animal
+{
 public:
-	Bird(int, int);
+  Bird();
+  Bird(int, int);
 };
 
-class Space : public Obstacle {
+class Space : public Obstacle
+{
 public:
-	Space(int, int);
+  Space();
+  Space(int, int);
 };
 
 #endif

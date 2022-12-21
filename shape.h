@@ -5,12 +5,16 @@
 
 using namespace std;
 
-class Shape {
+class Shape
+{
 private:
-	vector<vector<int>> shape;
+  vector<vector<int>> shape;
+
 public:
-	Shape(vector<vector<int>> shape);
-	vector<std::vector<int>> getShape();
+  Shape(vector<vector<int>> shape);
+  vector<std::vector<int>> getShape();
+  int getHeight();
+  int getWidth();
 };
 
 #endif

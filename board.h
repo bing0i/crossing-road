@@ -2,17 +2,60 @@
 #define BOARD_H
 
 #include <vector>
-#include "obstacle.h"
+#include "brush.h"
 #include "shape.h"
+#include "obstacle.h"
 
-class Board {
+class Board
+{
 private:
-	const int MAX_SIZE = 100;
-	vector<Obstacle> obstacles;
-	Shape shape;
+  vector<vector<int>> board = {{
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                               },
+                               {
+                                   1,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                                   0,
+                                   1,
+                               }};
+  Brush brush;
+
 public:
-	Board(Shape);
-	void updateBoard();
+  void drawBoard();
+  void clearBoard();
+  Shape getShape(int type);
+  void moveObstacles();
 };
 
 #endif

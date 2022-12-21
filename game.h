@@ -9,19 +9,21 @@
 
 using namespace std;
 
-class Game {
+class Game
+{
 private:
-	const int MAX_ROADS = 6;
-	vector<Road> roads;
-	bool isRunning;
-	int availableY = 0;
-	void fixConsoleWindow();
-	void hideCursor();
-	void run();
+  const int MAX_ROADS = 6;
+  vector<Road> roads;
+  bool isRunning;
+  int availableY = 0;
+  void fixConsoleWindow();
+  void hideCursor();
+  void run();
+
 public:
-	Game();
-	void start();
-	void exit(thread*);
-	void createRoads();
+  Game();
+  void start();
+  void exit(thread *);
+  void createRoads();
 };
 #endif
