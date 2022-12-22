@@ -3,9 +3,8 @@
 
 Game::Game()
 {
-  // hideCursor();
+  hideCursor();
   fixConsoleWindow();
-  createRoads();
 }
 
 void Game::fixConsoleWindow()
@@ -33,20 +32,15 @@ void Game::exit(thread *t)
 
 void Game::run()
 {
-  Brush b;
   while (isRunning)
   {
-    for (int i = 0; i < MAX_ROADS; ++i)
-    {
-      roads[i].start();
-    }
-
+    board.drawDecorations();
+    board.draw();
     Sleep(500);
+    if (!board.moveObstacles())
+      return;
 
-    for (int i = 0; i < MAX_ROADS; ++i)
-    {
-      roads[i].update();
-    }
+    brush.clearScreen();
   }
 }
 
@@ -56,21 +50,24 @@ void Game::start()
   isRunning = true;
   while (true)
   {
-    int temp = toupper(_getch());
-    if (temp == 27)
+    int key = tolower(_getch());
+    switch (key)
     {
+    case 'q':
       exit(&t1);
       return;
+    case 'w':
+    case 'a':
+    case 's':
+    case 'd':
+      if (!board.movePlayer(key))
+      {
+        _getch();
+        exit(&t1);
+        return;
+      }
+    default:
+      break;
     }
-  }
-}
-
-void Game::createRoads()
-{
-  for (int i = 0; i < MAX_ROADS; ++i)
-  {
-    Road road(availableY, 5);
-    roads.push_back(road);
-    availableY += 3;
   }
 }

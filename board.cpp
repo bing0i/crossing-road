@@ -1,53 +1,39 @@
 #include "board.h"
 
-void Board::drawBoard()
+int Board::getWidth()
 {
-  int x = 0;
-  int y = 0;
-  for (int i = 0; i < board.size(); ++i)
+  return board[0].size();
+}
+
+int Board::getHeight()
+{
+  return board.size();
+}
+
+void Board::draw()
+{
+  int x = START_X;
+  int y = START_Y;
+  for (int i = 0; i < getHeight(); ++i)
   {
-    for (int j = 0; j < board[0].size(); ++j)
+    for (int j = 0; j < getWidth(); ++j)
     {
+      if (board[i][j] == -1)
+      {
+        brush.drawPixel(x, y, 'Y');
+        x += 1;
+        continue;
+      }
+
       Shape shape = getShape(board[i][j]);
       brush.drawShape(x, y, shape);
       x += shape.getWidth();
+      j += shape.getWidth() - 1;
     }
 
-    brush.drawLine(y + 2, 100);
-
-    x = 0;
-    y += 3;
+    x = START_X;
+    y += GAP;
   }
-}
-
-void Board::clearBoard()
-{
-  // int x = 0;
-  // int y = 0;
-  // Shape shape = (new Space)->getShape();
-  // for (int i = 0; i < board.size(); ++i)
-  // {
-  //   for (int j = 0; j < board[0].size(); ++j)
-  //   {
-  //     if (board[i][j] == 0)
-  //     {
-  //       ++x;
-  //       continue;
-  //     }
-
-  //     int spaceWidth = getShape(board[i][j]).getWidth();
-  //     for (int k = 0; k < spaceWidth; ++k)
-  //     {
-  //       brush.clearShape(x + k, y, shape);
-  //     }
-
-  //     x += spaceWidth;
-  //   }
-
-  //   y += 3;
-  // }
-
-  brush.clearScreen();
 }
 
 Shape Board::getShape(int type)
@@ -69,18 +55,85 @@ Shape Board::getShape(int type)
   }
 }
 
-void Board::moveObstacles()
+bool Board::moveObstacles()
 {
-  int height = board.size();
-  int width = board[0].size();
-  for (int i = 0; i < height; i++)
+  int height = getHeight();
+  int width = getWidth();
+  bool isPlayerOnLastCol = false;
+  for (int i = 0; i < height; ++i)
   {
-    int temp = board[i][width - 1];
-    for (int j = width - 1; j > 0; j--)
+    bool isPlayerOnLastCol = board[i][width - 1] == -1;
+    int lastCol = isPlayerOnLastCol ? width - 2 : width - 1;
+    int lastElement = board[i][lastCol];
+    for (int j = lastCol; j > 0; j--)
     {
+      if (!isPlayerOnLastCol && board[i][j - 1] == -1)
+        movePlayer('d');
+
+      if (board[i][j] == -1)
+        continue;
+
       board[i][j] = board[i][j - 1];
     }
 
-    board[i][0] = temp;
+    board[i][0] = lastElement;
   }
+
+  return isPlayerOnLastCol ? true : movePlayer('a');
+}
+
+bool Board::isCollied(int x, int y)
+{
+  return board[y][x] != 0;
+}
+
+bool Board::movePlayer(char key)
+{
+  int oldX = player.getX();
+  int oldY = player.getY();
+
+  player.move(key);
+  int x = player.getX();
+  int y = player.getY();
+
+  if (!isCollied(x, y))
+  {
+    board[oldY][oldX] = 0;
+    board[y][x] = -1;
+    return true;
+  }
+
+  return false;
+}
+
+void Board::drawDecorations()
+{
+  brush.gotoXY(0, 0);
+  cout << "(C)ontinue Sav(e) (P)ause (R)estart (Q)uit" << endl;
+  cout << "Score: " << player.getScore();
+
+  brush.gotoXY(START_X - 1, START_Y - 1);
+
+  cout << char(201);
+  for (int i = 0; i < getWidth() + 3; ++i)
+    cout << char(205);
+  cout << char(187);
+
+  for (int i = START_Y; i < 4 * getHeight() - 1; ++i)
+  {
+    brush.gotoXY(START_X - 1, i);
+    cout << char(186);
+  }
+
+  for (int i = START_Y; i < 4 * getHeight() - 1; ++i)
+  {
+    brush.gotoXY(START_X + getWidth() + 3, i);
+    cout << char(186);
+  }
+
+  brush.gotoXY(START_X - 1, 4 * getHeight() - 1);
+  cout << char(200);
+  for (int i = 0; i < getWidth() + 3; ++i)
+    cout << char(205);
+  cout << char(188);
 }
