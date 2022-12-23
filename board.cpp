@@ -1,6 +1,16 @@
 #include "board.h"
 
-Board::Board() : player(getWidth(), getHeight()) {}
+Board::Board(vector<vector<int>> b) : board(b), player(getWidth(), getHeight()) {}
+
+int Board::getPosition(int x, int y)
+{
+  return board[y][x];
+}
+
+void Board::setBoard(vector<vector<int>> b)
+{
+  board = b;
+}
 
 int Board::getWidth()
 {
@@ -129,8 +139,9 @@ bool Board::movePlayer(char key)
 void Board::drawDecorations()
 {
   brush.gotoXY(0, 0);
-  cout << "(C)ontinue Sav(e) (P)ause (R)estart (Q)uit" << endl;
-  cout << "Score: " << player.getScore();
+  cout << "WSAD (C)ontinue (P)ause (L)oad Sav(e) (R)estart (Q)uit" << endl;
+  cout << "Score: " << player.getScore() << " - Level: " << level << endl;
+  cout << "Status: " << status << endl;
 
   brush.gotoXY(START_X - 1, START_Y - 1);
   cout << char(201);

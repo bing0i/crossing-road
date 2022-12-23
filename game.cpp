@@ -1,10 +1,46 @@
 #include "game.h"
 #include <iostream>
 
-Game::Game()
+Game::Game() : board(loadBoard("load.txt"))
 {
   hideCursor();
   fixConsoleWindow();
+}
+
+vector<vector<int>> Game::loadBoard(string path)
+{
+  vector<vector<int>> b;
+  ifstream file(path);
+  string line;
+  while (getline(file, line))
+  {
+    vector<int> row;
+    for (int i = 0; i < line.size(); ++i)
+    {
+      if (line[i] == ' ')
+        continue;
+      row.push_back(line[i] - '0');
+    }
+    b.push_back(row);
+  }
+
+  return b;
+}
+
+void Game::saveBoard(string path)
+{
+  ofstream file(path);
+  for (int i = 0; i < board.getHeight(); ++i)
+  {
+    for (int j = 0; j < board.getWidth(); ++j)
+    {
+      file << board.getPosition(j, i);
+      if (j != board.getWidth() - 1)
+        file << " ";
+    }
+
+    file << endl;
+  }
 }
 
 void Game::fixConsoleWindow()
@@ -66,6 +102,21 @@ void Game::start()
         exit(&t1);
         return;
       }
+      break;
+    case 'r':
+      board.setBoard(loadBoard("load.txt"));
+      break;
+    case 'l':
+      board.setBoard(loadBoard("load.txt"));
+      break;
+    case 'e':
+      saveBoard("save.txt");
+      break;
+    case 'p':
+      isRunning = false;
+      break;
+    case 'c':
+      isRunning = true;
       break;
     default:
       break;
