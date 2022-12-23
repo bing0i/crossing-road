@@ -4,20 +4,20 @@
 #include "shape.h"
 #include "brush.h"
 
-class Obstacle
+class Object
 {
 private:
   Shape shape;
 
 public:
-  Obstacle(vector<vector<int>> s) : shape(s){};
+  Object(vector<vector<int>> s) : shape(s){};
   Shape getShape();
 };
 
-class Vehicle : public Obstacle
+class Vehicle : public Object
 {
 public:
-  Vehicle(vector<vector<int>> s) : Obstacle(s){};
+  Vehicle(vector<vector<int>> s) : Object(s){};
 };
 
 class Car : public Vehicle
@@ -32,10 +32,10 @@ public:
   Truck();
 };
 
-class Animal : public Obstacle
+class Animal : public Object
 {
 public:
-  Animal(vector<vector<int>> s) : Obstacle(s){};
+  Animal(vector<vector<int>> s) : Object(s){};
 };
 
 class Dinausor : public Animal
@@ -50,10 +50,16 @@ public:
   Bird();
 };
 
-class Space : public Obstacle
+class Space : public Object
 {
 public:
   Space();
+};
+
+class PlayerShape : public Object
+{
+public:
+  PlayerShape();
 };
 
 #endif

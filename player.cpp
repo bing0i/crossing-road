@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player() : x(0), y(0), score(0) {}
+Player::Player(int w, int h) : width(w), height(h), x(0), y(0), score(0) {}
 
 void Player::move(int key)
 {
@@ -17,12 +17,12 @@ void Player::move(int key)
     --x;
     break;
   case 's':
-    if (y + 1 > 100)
+    if (y + 1 > height - 1)
       return;
     ++y;
     break;
   case 'd':
-    if (x + 1 > 100)
+    if (x + 1 > width - 1)
       return;
     ++x;
     break;

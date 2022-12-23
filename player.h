@@ -6,13 +6,15 @@
 class Player
 {
 private:
+  int width;
+  int height;
   int x;
   int y;
   int score;
   Brush brush;
 
 public:
-  Player();
+  Player(int, int);
   void move(int);
   int getX();
   int getY();

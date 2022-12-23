@@ -36,7 +36,7 @@ void Game::run()
   {
     board.drawDecorations();
     board.draw();
-    Sleep(500);
+    Sleep(1000);
     if (!board.moveObstacles())
       return;
 
@@ -66,6 +66,7 @@ void Game::start()
         exit(&t1);
         return;
       }
+      break;
     default:
       break;
     }

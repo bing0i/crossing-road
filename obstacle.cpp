@@ -1,6 +1,6 @@
 #include "obstacle.h"
 
-Shape Obstacle::getShape()
+Shape Object::getShape()
 {
   return shape;
 }
@@ -33,9 +33,16 @@ Bird::Bird() : Animal({
                    {0, 0, 0},
                }){};
 
-Space::Space() : Obstacle({
+Space::Space() : Object({
                      {0},
                      {0},
                      {0},
                      {0},
                  }){};
+
+PlayerShape::PlayerShape() : Object({
+                                 {0},
+                                 {0},
+                                 {0},
+                                 {1},
+                             }){};
