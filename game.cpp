@@ -68,14 +68,17 @@ void Game::exit(thread *t)
 
 void Game::run()
 {
+  int speed = board.getSpeed();
   while (isRunning)
   {
     board.drawDecorations();
     board.draw();
-    Sleep(board.getSpeed());
-    if (!board.moveObstacles())
-      return;
+    if (!board.isGameOver() && !board.isPaused())
+      board.moveObstacles();
+    else
+      continue;
 
+    Sleep(speed);
     brush.clearScreen();
   }
 }
@@ -96,15 +99,11 @@ void Game::start()
     case 'a':
     case 's':
     case 'd':
-      if (!board.movePlayer(key))
-      {
-        _getch();
-        exit(&t1);
-        return;
-      }
+      if (!board.isGameOver())
+        board.movePlayer(key);
       break;
     case 'r':
-      board.setBoard(loadBoard("load.txt"));
+      board.resetBoard();
       break;
     case 'l':
       board.setBoard(loadBoard("load.txt"));
@@ -113,10 +112,10 @@ void Game::start()
       saveBoard("save.txt");
       break;
     case 'p':
-      isRunning = false;
+      board.pause();
       break;
     case 'c':
-      isRunning = true;
+      board.resume();
       break;
     default:
       break;

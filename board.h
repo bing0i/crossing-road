@@ -14,9 +14,11 @@ private:
   const int START_X = 10;
   const int START_Y = 5;
   const int GAP = 3;
+  const int MAX_LEVEL = 5;
+  const int SPEED = 300;
 
   vector<vector<int>> board;
-  string status = "playing";
+  string status = "Running";
   int level = 1;
 
   Brush brush;
@@ -28,6 +30,9 @@ private:
   bool isCollied(int, int);
   bool isCompleteShape(int, int, int);
 
+  void increaseLevel();
+  void generateBoard();
+
 public:
   Board(vector<vector<int>>);
   Board(int, int);
@@ -36,16 +41,21 @@ public:
   int getWidth();
   int getHeight();
   int getSpeed();
+  string getStatus();
 
   void draw();
   void drawDecorations();
 
-  bool moveObstacles();
-  bool movePlayer(char);
+  void moveObstacles();
+  void movePlayer(char);
 
-  void generateBoard();
+  void resetBoard();
 
-  void increaseLevel();
+  void pause();
+  void resume();
+
+  bool isGameOver();
+  bool isPaused();
 };
 
 #endif

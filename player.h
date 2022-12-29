@@ -16,6 +16,7 @@ private:
 public:
   Player(int, int);
   void increaseScore();
+  void resetScore();
   void setXY(int, int);
   int getScore();
   int getX();

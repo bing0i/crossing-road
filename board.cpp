@@ -2,9 +2,9 @@
 
 Board::Board(vector<vector<int>> b) : board(b), player(getWidth(), getHeight()) {}
 
-Board::Board(int width, int height) : player(width, height)
+Board::Board(int width, int height) : board(height, vector<int>(width, 0)), player(width, height)
 {
-  board = vector<vector<int>>(height, vector<int>(width, 0));
+  player.setXY(width / 2, 0);
   generateBoard();
 }
 
@@ -36,6 +36,9 @@ void Board::draw()
   {
     for (int j = 0; j < getWidth(); ++j)
     {
+      if (board[i][j] == -1)
+        brush.changeColor(2);
+
       Shape shape = getShape(board[i][j]);
       int shapeWidth = shape.getWidth();
       if (!isCompleteShape(i, j, shapeWidth))
@@ -47,6 +50,9 @@ void Board::draw()
       brush.drawShape(x, y, shape);
       x += shapeWidth;
       j += shapeWidth - 1;
+
+      if (board[i][j] == -1)
+        brush.changeColor(15);
     }
 
     x = START_X;
@@ -90,7 +96,7 @@ Shape Board::getShape(int type)
   }
 }
 
-bool Board::moveObstacles()
+void Board::moveObstacles()
 {
   int height = getHeight();
   int width = getWidth();
@@ -110,12 +116,12 @@ bool Board::moveObstacles()
   if (isCollied(x, y))
   {
     status = "Game Over";
-    return false;
+    return;
   }
 
   board[y][x] = -1;
   board[y][x + 1] = 0;
-  return true;
+  return;
 }
 
 bool Board::isCollied(int x, int y)
@@ -123,7 +129,7 @@ bool Board::isCollied(int x, int y)
   return board[y][x] != 0;
 }
 
-bool Board::movePlayer(char key)
+void Board::movePlayer(char key)
 {
   int oldX = player.getX();
   int oldY = player.getY();
@@ -133,7 +139,7 @@ bool Board::movePlayer(char key)
     player.setXY(oldX, 0);
     player.increaseScore();
     increaseLevel();
-    return true;
+    return;
   }
 
   player.move(key);
@@ -143,7 +149,7 @@ bool Board::movePlayer(char key)
   if (isCollied(x, y))
   {
     status = "Game Over";
-    return false;
+    return;
   }
 
   board[oldY][oldX] = 0;
@@ -152,16 +158,11 @@ bool Board::movePlayer(char key)
   if (key == 's')
     player.increaseScore();
 
-  return true;
+  return;
 }
 
 void Board::drawDecorations()
 {
-  brush.gotoXY(0, 0);
-  cout << "WSAD (C)ontinue (P)ause (L)oad Sav(e) (R)estart (Q)uit" << endl;
-  cout << "Score: " << player.getScore() << " - Level: " << level << endl;
-  cout << "Status: " << status << endl;
-
   brush.gotoXY(START_X - 1, START_Y - 1);
   cout << char(201);
   for (int i = 0; i < getWidth(); ++i)
@@ -192,6 +193,35 @@ void Board::drawDecorations()
     for (int j = 0; j < getWidth(); ++j)
       cout << char(205);
   }
+
+  brush.gotoXY(START_X + 5, 22);
+  brush.changeColor(5);
+  cout << "Status: " << status;
+  brush.gotoXY(START_X + 5, 23);
+  cout << "Score: " << player.getScore() << " - Level: " << level;
+  brush.changeColor(15);
+
+  brush.gotoXY(START_X + 5, 24);
+  cout << "Press [W] to move up";
+  brush.gotoXY(START_X + 5, 25);
+  cout << "Press [S] to move down";
+  brush.gotoXY(START_X + 5, 26);
+  cout << "Press [A] to move left";
+  brush.gotoXY(START_X + 5, 27);
+  cout << "Press [D] to move right";
+
+  brush.gotoXY(75, 22);
+  cout << "Press [R] to restart";
+  brush.gotoXY(75, 23);
+  cout << "Press [L] to load (.\\load.txt)";
+  brush.gotoXY(75, 24);
+  cout << "Press [E] to save (.\\save.txt)";
+  brush.gotoXY(75, 25);
+  cout << "Press [P] to pause";
+  brush.gotoXY(75, 26);
+  cout << "Press [C] to continue";
+  brush.gotoXY(75, 27);
+  cout << "Press [Q] to quit";
 }
 
 int Board::getRandomNumber(int start, int end)
@@ -237,11 +267,54 @@ void Board::generateBoard()
 
 int Board::getSpeed()
 {
-  return 1200 / level;
+  return SPEED;
 }
 
 void Board::increaseLevel()
 {
-  ++level;
+  if (level == MAX_LEVEL)
+  {
+    level = 1;
+  }
+  else
+  {
+    ++level;
+  }
+
   generateBoard();
+}
+
+void Board::resetBoard()
+{
+  player.setXY(getWidth() / 2, 0);
+  player.resetScore();
+
+  level = 1;
+  status = "Running";
+  generateBoard();
+}
+
+bool Board::isGameOver()
+{
+  return status == "Game Over";
+}
+
+string Board::getStatus()
+{
+  return status;
+}
+
+void Board::resume()
+{
+  status = "Running";
+}
+
+void Board::pause()
+{
+  status = "Paused";
+}
+
+bool Board::isPaused()
+{
+  return status == "Paused";
 }
