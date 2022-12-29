@@ -15,7 +15,7 @@ private:
   const int START_Y = 5;
   const int GAP = 3;
   const int MAX_LEVEL = 5;
-  const int SPEED = 300;
+  const int SPEED = 400;
 
   vector<vector<int>> board;
   string status = "Running";
@@ -37,10 +37,14 @@ public:
   Board(vector<vector<int>>);
   Board(int, int);
   void setBoard(vector<vector<int>>);
+  void setLevel(int);
+  void setScore(int);
   int getPosition(int, int);
   int getWidth();
   int getHeight();
   int getSpeed();
+  int getLevel();
+  int getScore();
   string getStatus();
 
   void draw();

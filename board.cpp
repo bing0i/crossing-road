@@ -16,6 +16,17 @@ int Board::getPosition(int x, int y)
 void Board::setBoard(vector<vector<int>> b)
 {
   board = b;
+  for (int i = 0; i < getHeight(); ++i)
+  {
+    for (int j = 0; j < getWidth(); ++j)
+    {
+      if (board[i][j] == -1)
+      {
+        player.setXY(j, i);
+        return;
+      }
+    }
+  }
 }
 
 int Board::getWidth()
@@ -195,7 +206,7 @@ void Board::drawDecorations()
   }
 
   brush.gotoXY(START_X + 5, 22);
-  brush.changeColor(5);
+  brush.changeColor(3);
   cout << "Status: " << status;
   brush.gotoXY(START_X + 5, 23);
   cout << "Score: " << player.getScore() << " - Level: " << level;
@@ -317,4 +328,24 @@ void Board::pause()
 bool Board::isPaused()
 {
   return status == "Paused";
+}
+
+int Board::getLevel()
+{
+  return level;
+}
+
+void Board::setLevel(int level)
+{
+  this->level = level;
+}
+
+int Board::getScore()
+{
+  return player.getScore();
+}
+
+void Board::setScore(int level)
+{
+  player.setScore(level);
 }

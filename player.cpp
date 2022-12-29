@@ -59,3 +59,8 @@ void Player::resetScore()
 {
   score = 0;
 }
+
+void Player::setScore(int score)
+{
+  this->score = score;
+}

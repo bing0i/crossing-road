@@ -7,11 +7,17 @@ Game::Game() : board(100, 5)
   fixConsoleWindow();
 }
 
-vector<vector<int>> Game::loadBoard(string path)
+void Game::loadBoard(string path)
 {
   vector<vector<int>> b;
   ifstream file(path);
   string line;
+
+  getline(file, line);
+  board.setLevel(stoi(line));
+  getline(file, line);
+  board.setScore(stoi(line));
+
   while (getline(file, line))
   {
     vector<int> row;
@@ -19,17 +25,31 @@ vector<vector<int>> Game::loadBoard(string path)
     {
       if (line[i] == ' ')
         continue;
+
+      if (line[i] == '-')
+      {
+        row.push_back(-1);
+        ++i;
+        continue;
+      }
+
       row.push_back(line[i] - '0');
     }
+
     b.push_back(row);
   }
 
-  return b;
+  board.setBoard(b);
 }
 
 void Game::saveBoard(string path)
 {
+  if (board.isGameOver())
+    return;
+
   ofstream file(path);
+  file << board.getLevel() << endl;
+  file << board.getScore() << endl;
   for (int i = 0; i < board.getHeight(); ++i)
   {
     for (int j = 0; j < board.getWidth(); ++j)
@@ -99,14 +119,15 @@ void Game::start()
     case 'a':
     case 's':
     case 'd':
-      if (!board.isGameOver())
+      if (!board.isGameOver() && !board.isPaused())
         board.movePlayer(key);
       break;
     case 'r':
       board.resetBoard();
       break;
     case 'l':
-      board.setBoard(loadBoard("load.txt"));
+      loadBoard("load.txt");
+      board.pause();
       break;
     case 'e':
       saveBoard("save.txt");
@@ -115,7 +136,8 @@ void Game::start()
       board.pause();
       break;
     case 'c':
-      board.resume();
+      if (board.isPaused())
+        board.resume();
       break;
     default:
       break;

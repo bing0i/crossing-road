@@ -15,14 +15,16 @@ private:
 
 public:
   Player(int, int);
-  void increaseScore();
-  void resetScore();
   void setXY(int, int);
+  void setScore(int);
   int getScore();
   int getX();
   int getY();
 
   void move(int);
+
+  void increaseScore();
+  void resetScore();
 };
 
 #endif

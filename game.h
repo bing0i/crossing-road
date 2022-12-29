@@ -19,10 +19,13 @@ private:
   Brush brush;
   Board board;
   bool isRunning;
+
   void fixConsoleWindow();
   void hideCursor();
+
   void run();
-  vector<vector<int>> loadBoard(string);
+
+  void loadBoard(string);
   void saveBoard(string);
 
 public:
