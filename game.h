@@ -16,9 +16,11 @@ using namespace std;
 class Game
 {
 private:
+  int WIDTH = 100;
+  int HEIGHT = 5;
+  bool isRunning;
   Brush brush;
   Board board;
-  bool isRunning;
 
   void fixConsoleWindow();
   void hideCursor();

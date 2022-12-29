@@ -48,7 +48,7 @@ void Board::draw()
     for (int j = 0; j < getWidth(); ++j)
     {
       if (board[i][j] == -1)
-        brush.changeColor(2);
+        brush.changeColor(13);
 
       Shape shape = getShape(board[i][j]);
       int shapeWidth = shape.getWidth();
@@ -68,6 +68,17 @@ void Board::draw()
 
     x = START_X;
     y += GAP;
+  }
+
+  for (int i = 0; i < trafficLights.size(); ++i)
+  {
+    int x = START_X + getWidth() - 1;
+    int y = START_Y + trafficLights[i] * GAP;
+    brush.changeColor(10);
+    brush.drawPixel(x, y, char(220));
+    brush.changeColor(12);
+    brush.drawPixel(x, y + 1, char(223));
+    brush.changeColor(15);
   }
 }
 
@@ -113,6 +124,19 @@ void Board::moveObstacles()
   int width = getWidth();
   for (int i = 0; i < height; ++i)
   {
+    bool hasTrafficLight = false;
+    for (int k = 0; k < trafficLights.size(); ++k)
+    {
+      if (i == trafficLights[k])
+      {
+        hasTrafficLight = true;
+        break;
+      }
+    }
+
+    if (hasTrafficLight)
+      continue;
+
     int lastElement = board[i][width - 1];
     for (int j = width; j > 0; j--)
     {
@@ -137,7 +161,7 @@ void Board::moveObstacles()
 
 bool Board::isCollied(int x, int y)
 {
-  return board[y][x] != 0;
+  return board[y][x] != 0 && board[y][x] != -1;
 }
 
 void Board::movePlayer(char key)
@@ -206,7 +230,7 @@ void Board::drawDecorations()
   }
 
   brush.gotoXY(START_X + 5, 22);
-  brush.changeColor(3);
+  brush.changeColor(11);
   cout << "Status: " << status;
   brush.gotoXY(START_X + 5, 23);
   cout << "Score: " << player.getScore() << " - Level: " << level;
@@ -293,6 +317,7 @@ void Board::increaseLevel()
   }
 
   generateBoard();
+  generateTrafficLights();
 }
 
 void Board::resetBoard()
@@ -348,4 +373,25 @@ int Board::getScore()
 void Board::setScore(int level)
 {
   player.setScore(level);
+}
+
+void Board::generateTrafficLights()
+{
+  int total = getRandomNumber(0, getHeight() - 1);
+  trafficLights.clear();
+  for (int i = 0; i < total; ++i)
+  {
+    int road = getRandomNumber(1, getHeight() - 1);
+    trafficLights.push_back(road);
+  }
+}
+
+vector<int> Board::getTrafficLights()
+{
+  return trafficLights;
+}
+
+void Board::setTrafficLights(vector<int> trafficLights)
+{
+  this->trafficLights = trafficLights;
 }

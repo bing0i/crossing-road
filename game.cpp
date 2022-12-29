@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 
-Game::Game() : board(100, 5)
+Game::Game() : board(WIDTH, HEIGHT)
 {
   hideCursor();
   fixConsoleWindow();
@@ -10,6 +10,7 @@ Game::Game() : board(100, 5)
 void Game::loadBoard(string path)
 {
   vector<vector<int>> b;
+  vector<int> tl;
   ifstream file(path);
   string line;
 
@@ -17,6 +18,16 @@ void Game::loadBoard(string path)
   board.setLevel(stoi(line));
   getline(file, line);
   board.setScore(stoi(line));
+  getline(file, line);
+  for (int i = 0; i < line.size(); ++i)
+  {
+    if (line[i] == ' ')
+      continue;
+
+    tl.push_back(line[i] - '0');
+  }
+
+  board.setTrafficLights(tl);
 
   while (getline(file, line))
   {
@@ -50,6 +61,15 @@ void Game::saveBoard(string path)
   ofstream file(path);
   file << board.getLevel() << endl;
   file << board.getScore() << endl;
+  vector<int> trafficLights = board.getTrafficLights();
+  for (int i = 0; i < trafficLights.size(); ++i)
+  {
+    file << trafficLights[i];
+    if (i != trafficLights.size() - 1)
+      file << " ";
+  }
+
+  file << endl;
   for (int i = 0; i < board.getHeight(); ++i)
   {
     for (int j = 0; j < board.getWidth(); ++j)
@@ -131,6 +151,7 @@ void Game::start()
       break;
     case 'e':
       saveBoard("save.txt");
+      board.pause();
       break;
     case 'p':
       board.pause();

@@ -18,6 +18,7 @@ private:
   const int SPEED = 400;
 
   vector<vector<int>> board;
+  vector<int> trafficLights;
   string status = "Running";
   int level = 1;
 
@@ -32,6 +33,7 @@ private:
 
   void increaseLevel();
   void generateBoard();
+  void generateTrafficLights();
 
 public:
   Board(vector<vector<int>>);
@@ -39,6 +41,7 @@ public:
   void setBoard(vector<vector<int>>);
   void setLevel(int);
   void setScore(int);
+  void setTrafficLights(vector<int>);
   int getPosition(int, int);
   int getWidth();
   int getHeight();
@@ -46,6 +49,7 @@ public:
   int getLevel();
   int getScore();
   string getStatus();
+  vector<int> getTrafficLights();
 
   void draw();
   void drawDecorations();
