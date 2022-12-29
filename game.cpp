@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 
-Game::Game() : board(loadBoard("load.txt"))
+Game::Game() : board(100, 5)
 {
   hideCursor();
   fixConsoleWindow();
@@ -72,7 +72,7 @@ void Game::run()
   {
     board.drawDecorations();
     board.draw();
-    Sleep(1000);
+    Sleep(board.getSpeed());
     if (!board.moveObstacles())
       return;
 

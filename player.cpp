@@ -43,3 +43,14 @@ int Player::getScore()
 {
   return score;
 }
+
+void Player::increaseScore()
+{
+  ++score;
+}
+
+void Player::setXY(int x, int y)
+{
+  this->x = x;
+  this->y = y;
+}

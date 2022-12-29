@@ -10,15 +10,18 @@ private:
   int height;
   int x;
   int y;
-  int score;
+  int score = 0;
   Brush brush;
 
 public:
   Player(int, int);
-  void move(int);
+  void increaseScore();
+  void setXY(int, int);
+  int getScore();
   int getX();
   int getY();
-  int getScore();
+
+  void move(int);
 };
 
 #endif

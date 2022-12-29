@@ -2,6 +2,12 @@
 
 Board::Board(vector<vector<int>> b) : board(b), player(getWidth(), getHeight()) {}
 
+Board::Board(int width, int height) : player(width, height)
+{
+  board = vector<vector<int>>(height, vector<int>(width, 0));
+  generateBoard();
+}
+
 int Board::getPosition(int x, int y)
 {
   return board[y][x];
@@ -88,28 +94,28 @@ bool Board::moveObstacles()
 {
   int height = getHeight();
   int width = getWidth();
-  bool isPlayerOnLastCol = false;
-  bool isPlayerMoved = false;
   for (int i = 0; i < height; ++i)
   {
-    bool isPlayerOnLastCol = board[i][width - 1] == -1;
-    int lastCol = isPlayerOnLastCol ? width - 2 : width - 1;
-    int lastElement = board[i][lastCol];
-    for (int j = lastCol; j > 0; j--)
+    int lastElement = board[i][width - 1];
+    for (int j = width; j > 0; j--)
     {
-      if (!isPlayerOnLastCol && board[i][j - 1] == -1)
-        isPlayerMoved = movePlayer('d');
-
-      if (board[i][j] == -1)
-        continue;
-
       board[i][j] = board[i][j - 1];
     }
 
     board[i][0] = lastElement;
   }
 
-  return isPlayerMoved ? movePlayer('a') : true;
+  int x = player.getX();
+  int y = player.getY();
+  if (isCollied(x, y))
+  {
+    status = "Game Over";
+    return false;
+  }
+
+  board[y][x] = -1;
+  board[y][x + 1] = 0;
+  return true;
 }
 
 bool Board::isCollied(int x, int y)
@@ -122,18 +128,31 @@ bool Board::movePlayer(char key)
   int oldX = player.getX();
   int oldY = player.getY();
 
+  if (key == 's' && oldY == getHeight() - 1)
+  {
+    player.setXY(oldX, 0);
+    player.increaseScore();
+    increaseLevel();
+    return true;
+  }
+
   player.move(key);
   int x = player.getX();
   int y = player.getY();
 
-  if (!isCollied(x, y))
+  if (isCollied(x, y))
   {
-    board[oldY][oldX] = 0;
-    board[y][x] = -1;
-    return true;
+    status = "Game Over";
+    return false;
   }
 
-  return false;
+  board[oldY][oldX] = 0;
+  board[y][x] = -1;
+
+  if (key == 's')
+    player.increaseScore();
+
+  return true;
 }
 
 void Board::drawDecorations()
@@ -173,4 +192,56 @@ void Board::drawDecorations()
     for (int j = 0; j < getWidth(); ++j)
       cout << char(205);
   }
+}
+
+int Board::getRandomNumber(int start, int end)
+{
+  random_device dev;
+  mt19937 rng(dev());
+  uniform_int_distribution<mt19937::result_type> dist6(start, end);
+  return dist6(rng);
+}
+
+void Board::generateBoard()
+{
+  int height = getHeight();
+  int width = getWidth();
+  for (int i = 0; i < width; ++i)
+  {
+    board[0][i] = 0;
+  }
+
+  player.setXY(player.getX(), 0);
+  board[0][player.getX()] = -1;
+  for (int i = 1; i < height; ++i)
+  {
+    int type = getRandomNumber(1, 4);
+    for (int j = 0; j < width; ++j)
+    {
+      int shapeWidth = getShape(type).getWidth();
+      for (int k = 0; k < shapeWidth; ++k)
+      {
+        board[i][j] = type;
+        ++j;
+      }
+
+      int spaces = getRandomNumber(5, 10);
+      for (int k = 0; k < spaces; ++k)
+      {
+        board[i][j] = 0;
+        ++j;
+      }
+    }
+  }
+}
+
+int Board::getSpeed()
+{
+  return 1200 / level;
+}
+
+void Board::increaseLevel()
+{
+  ++level;
+  generateBoard();
 }
