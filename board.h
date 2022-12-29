@@ -6,7 +6,7 @@
 #include <random>
 #include "brush.h"
 #include "player.h"
-#include "obstacle.h"
+#include "object.h"
 
 class Board
 {

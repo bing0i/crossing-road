@@ -266,7 +266,7 @@ void Board::generateBoard()
         ++j;
       }
 
-      int spaces = getRandomNumber(5, 10);
+      int spaces = getRandomNumber(10 / level, 20 / level);
       for (int k = 0; k < spaces; ++k)
       {
         board[i][j] = 0;

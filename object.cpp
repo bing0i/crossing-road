@@ -1,4 +1,4 @@
-#include "obstacle.h"
+#include "object.h"
 
 Shape Object::getShape()
 {
