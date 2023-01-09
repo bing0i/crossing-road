@@ -16,8 +16,8 @@ using namespace std;
 class Game
 {
 private:
-  int WIDTH = 100;
-  int HEIGHT = 5;
+  const int WIDTH = 100;
+  const int HEIGHT = 5;
   bool isRunning;
   Brush brush;
   Board board;

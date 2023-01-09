@@ -1,8 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "brush.h"
-
 class Player
 {
 private:
@@ -11,7 +9,6 @@ private:
   int x;
   int y;
   int score = 0;
-  Brush brush;
 
 public:
   Player(int, int);
